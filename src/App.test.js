@@ -1,13 +1,34 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import App from './App'
 
-beforeAll(() => render(<App />))
-
 test('renders the app', () => {
+  render(<App />)
+
   expect(screen.getByRole('heading')).toBeInTheDocument()
 });
 
-test('has 12 buttons', () => {
-  const items = screen.getByRole('button')
-  expect(items).toHaveLength(10)
+test('renders input', () => {
+  render(<App />)
+
+  fireEvent.click(screen.getByText('2'))
+
+  expect(screen.getByRole('heading')).toHaveTextContent('2')
+});
+
+test('renders mnemonics list', () => {
+  render(<App />)
+
+  fireEvent.click(screen.getByText('2'))
+  fireEvent.click(screen.getByText('4'))
+
+  expect(screen.getAllByRole('listitem')).toHaveLength(9)
+});
+
+test('clears the input', () => {
+  render(<App />)
+
+  fireEvent.click(screen.getByText('2'))
+  fireEvent.click(screen.getByText('Clear'))
+
+  expect(screen.getByRole('heading')).toHaveTextContent('')
 });
